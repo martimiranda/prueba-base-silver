@@ -29,7 +29,8 @@
 
   <script>
     async function sendPhone() {
-      const phone = document.getElementById("phoneInput").value.trim();
+      let phone = document.getElementById("phoneInput").value.trim();
+      phone = '+34' + phone.replace(/[^0-9]/g, ''); // Formatear el número
       const responseMessage = document.getElementById("responseMessage");
 
       if (!phone) {
