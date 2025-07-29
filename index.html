@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recibir Llamada</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md text-center">
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">Solicita tu llamada</h1>
+    
+    <input 
+      type="tel" 
+      id="phoneInput" 
+      placeholder="Ingresa tu número de teléfono" 
+      class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+    />
+
+    <button 
+      onclick="sendPhone()" 
+      class="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition-colors"
+    >
+      Recibir llamada
+    </button>
+
+    <p id="responseMessage" class="mt-4 text-sm text-gray-600"></p>
+  </div>
+
+  <script>
+    async function sendPhone() {
+      const phone = document.getElementById("phoneInput").value.trim();
+      const responseMessage = document.getElementById("responseMessage");
+
+      if (!phone) {
+        responseMessage.textContent = "Por favor, introduce un número válido.";
+        return;
+      }
+
+      try {
+        const response = await fetch("https://hook.eu2.make.com/r9j9es7hyhv1yhdt7oixvwgvp9hw4e77", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ phone })
+        });
+
+        if (!response.ok) throw new Error("Error en la solicitud");
+
+        const data = await response.json(); // o .text() si no es JSON
+
+        responseMessage.textContent = "Llamada solicitada con éxito.";
+      } catch (error) {
+        responseMessage.textContent = "Hubo un error al solicitar la llamada.";
+        console.error(error);
+      }
+    }
+  </script>
+</body>
+</html>
